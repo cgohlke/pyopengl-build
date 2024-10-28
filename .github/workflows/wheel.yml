@@ -1,0 +1,92 @@
+name: Build PyOpenGL wheels for Windows
+
+on:
+  workflow_dispatch:
+
+env:
+  PYOPENGL_VER: release-3.1.8
+  FREEGLUT_VER: v3.6.0
+  GLE_VER: 3.1.0
+  PIP_NO_VERIFY: 0
+  PIP_VERBOSE: 1
+  CIBW_BUILD_VERBOSITY: 1
+  CIBW_ENVIRONMENT_WINDOWS: "PIP_NO_BUILD_ISOLATION=false"
+  CIBW_BEFORE_BUILD: pip install -U setuptools wheel numpy Cython
+  # CIBW_TEST_REQUIRES:
+  # CIBW_TEST_COMMAND:
+  # CIBW_TEST_SKIP: "*win32 cp313*"
+  CIBW_SKIP: "pp* cp36* cp37* cp38*"
+  MSBUILDTREATHIGHERTOOLSVERSIONASCURRENT: 1
+
+jobs:
+  build_amd64:
+    name: Build AMD64 wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2022]
+    env:
+      VS_PLATFORM: x64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
+      - run: download.cmd
+        shell: cmd
+      - run: build.cmd
+        shell: cmd
+      - name: Move PyOpenGL package
+        run: mv pyopengl-${{env.PYOPENGL_VER}}/* ./
+      - uses: pypa/cibuildwheel@v2.21.3
+        env:
+          CIBW_ARCHS_WINDOWS: AMD64
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ./wheelhouse/*.whl
+          name: wheels-win-amd64
+  build_x86:
+    name: Build x86 wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2022]
+    env:
+      VS_PLATFORM: Win32
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64_x86
+      - run: download.cmd
+        shell: cmd
+      - run: build.cmd
+        shell: cmd
+      - name: Move PyOpenGL package
+        run: mv pyopengl-${{env.PYOPENGL_VER}}/* ./
+      - uses: pypa/cibuildwheel@v2.21.3
+        env:
+          CIBW_ARCHS_WINDOWS: x86
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ./wheelhouse/*.whl
+          name: wheels-win32
+  build_accelerate:
+    name: Build accelerate wheels
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2022]
+    steps:
+      - uses: actions/checkout@v4
+      - run: download.cmd
+        shell: cmd
+      - name: Move PyOpenGL-accelerate package
+        run: mv pyopengl-${{env.PYOPENGL_VER}}/accelerate/* ./
+      - uses: pypa/cibuildwheel@v2.21.3
+        env:
+          CIBW_ARCHS_WINDOWS: AMD64 x86
+      - uses: actions/upload-artifact@v4
+        with:
+          path: ./wheelhouse/*.whl
+          name: wheels-accelerate

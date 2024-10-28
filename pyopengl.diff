@@ -1,0 +1,111 @@
+diff --git a/OpenGL/version.py b/OpenGL/version.py
+index cf5d50f..6ba9a20 100644
+--- a/OpenGL/version.py
++++ b/OpenGL/version.py
+@@ -1,2 +1,2 @@
+ """Declares the current version for use in setuptools and the like"""
+-__version__ = "3.1.7"
++__version__ = "3.1.8"
+diff --git a/accelerate/OpenGL_accelerate/__init__.py b/accelerate/OpenGL_accelerate/__init__.py
+index 692bad1..f227655 100644
+--- a/accelerate/OpenGL_accelerate/__init__.py
++++ b/accelerate/OpenGL_accelerate/__init__.py
+@@ -6,5 +6,5 @@ wrapper mechanism.  The source code is part of the
+ PyOpenGL package and is built via the setupaccel.py
+ script in the top level of the PyOpenGL source package.
+ """
+-__version__ = "3.1.7"
+-__version_tuple__ = (3, 1, 7)
++__version__ = "3.1.8"
++__version_tuple__ = (3, 1, 8)
+diff --git a/setup.py b/setup.py
+index 9c99241..cfec6bd 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1,7 +1,7 @@
+ #! /usr/bin/env python
+ """PyOpenGL setup script distutils/setuptools/pip based"""
+ import sys, os
+-from distutils.core import setup
++from setuptools import setup
+ from distutils.command.install_data import install_data
+ 
+ extra_commands = {}
+@@ -45,4 +45,5 @@ if __name__ == "__main__":
+         },
+         data_files=datafiles,
+         cmdclass=extra_commands,
++        libraries=[('',{'sources':[]})],
+     )
+
+diff --git a/OpenGL/GLUT/special.py b/OpenGL/GLUT/special.py
+index da3930ec..100c55a8 100644
+--- a/OpenGL/GLUT/special.py
++++ b/OpenGL/GLUT/special.py
+@@ -70,7 +70,7 @@ if __glutInitWithExit:
+         This is the Win32-specific version that handles
+         registration of an exit-function handler 
+         """
+-        return __glutCreateWindowWithExit(title, _exitfunc)
++        return __glutCreateWindowWithExit(as_8_bit(title), _exitfunc)
+     def glutCreateMenu(callback):
+         """Create menu with given callback 
+         
+diff --git a/OpenGL/__init__.py b/OpenGL/__init__.py
+index f9cc6bfc..100f05d4 100644
+--- a/OpenGL/__init__.py
++++ b/OpenGL/__init__.py
+@@ -347,7 +347,7 @@ FormatHandler(
+         "numpy.float16",
+         "numpy.float32",
+         "numpy.float64",
+-        "numpy.float128",
++        # "numpy.float128",
+     ],
+     isOutput=True,
+ )
+diff --git a/OpenGL/platform/win32.py b/OpenGL/platform/win32.py
+index 619e6c84..7c241802 100644
+--- a/OpenGL/platform/win32.py
++++ b/OpenGL/platform/win32.py
+@@ -4,14 +4,14 @@ import platform
+ from OpenGL.platform import ctypesloader, baseplatform
+ import sys
+ 
+-if sys.hexversion < 0x2070000:
+-    vc = 'vc7'
+-elif sys.hexversion >= 0x3050000:
+-    vc = 'vc14'
+-elif sys.hexversion >= 0x3030000:
+-    vc = 'vc10'
+-else:
+-    vc = 'vc9'
++# if sys.hexversion < 0x2070000:
++#     vc = 'vc7'
++# elif sys.hexversion >= 0x3050000:
++#     vc = 'vc14'
++# elif sys.hexversion >= 0x3030000:
++#     vc = 'vc10'
++# else:
++#     vc = 'vc9'
+ 
+ def _size():
+     return platform.architecture()[0].strip( 'bits' )
+@@ -39,7 +39,7 @@ class Win32Platform( baseplatform.BasePlatform ):
+             return None
+     @baseplatform.lazy_property
+     def GLUT( self ):
+-        for possible in ('freeglut%s.%s'%(size,vc,), 'glut%s.%s'%(size,vc,)):
++        for possible in ('freeglut', 'freeglut%s'%(size,), 'glut%s'%(size,)):
+             # Prefer FreeGLUT if the user has installed it, fallback to the included 
+             # GLUT if it is installed
+             try:
+@@ -51,7 +51,7 @@ class Win32Platform( baseplatform.BasePlatform ):
+         return None
+     @baseplatform.lazy_property
+     def GLE( self ):
+-        for libName in ('gle%s.%s'%(size,vc,), 'opengle%s.%s'%(size,vc,)):
++        for libName in ('gle32', 'gle%s'%(size,), 'opengle%s'%(size,)):
+             try:
+                 GLE = ctypesloader.loadLibrary( ctypes.cdll, libName )
+                 GLE.FunctionType = ctypes.CFUNCTYPE
