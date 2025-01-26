@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  PYOPENGL_VER: release-3.1.8
+  PYOPENGL_VER: release-3.1.9
   FREEGLUT_VER: v3.6.0
   GLE_VER: 3.1.0
   PIP_NO_VERIFY: 0
@@ -15,7 +15,7 @@ env:
   # CIBW_TEST_REQUIRES:
   # CIBW_TEST_COMMAND:
   # CIBW_TEST_SKIP: "*win32 cp313*"
-  CIBW_SKIP: "pp* cp36* cp37* cp38*"
+  CIBW_SKIP: "pp* cp36* cp37* cp38* cp39*"
   MSBUILDTREATHIGHERTOOLSVERSIONASCURRENT: 1
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
         shell: cmd
       - name: Move PyOpenGL package
         run: mv pyopengl-${{env.PYOPENGL_VER}}/* ./
-      - uses: pypa/cibuildwheel@v2.21.3
+      - uses: pypa/cibuildwheel@v2.22.0
         env:
           CIBW_ARCHS_WINDOWS: AMD64
       - uses: actions/upload-artifact@v4
@@ -64,7 +64,7 @@ jobs:
         shell: cmd
       - name: Move PyOpenGL package
         run: mv pyopengl-${{env.PYOPENGL_VER}}/* ./
-      - uses: pypa/cibuildwheel@v2.21.3
+      - uses: pypa/cibuildwheel@v2.22.0
         env:
           CIBW_ARCHS_WINDOWS: x86
       - uses: actions/upload-artifact@v4
@@ -82,8 +82,10 @@ jobs:
       - run: download.cmd
         shell: cmd
       - name: Move PyOpenGL-accelerate package
-        run: mv pyopengl-${{env.PYOPENGL_VER}}/accelerate/* ./
-      - uses: pypa/cibuildwheel@v2.21.3
+        run: |
+          rm ./README.md
+          mv pyopengl-${{env.PYOPENGL_VER}}/accelerate/* ./
+      - uses: pypa/cibuildwheel@v2.22.0
         env:
           CIBW_ARCHS_WINDOWS: AMD64 x86
       - uses: actions/upload-artifact@v4

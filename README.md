@@ -6,5 +6,5 @@ The wheels can be downloaded from the [Releases](https://github.com/cgohlke/pyop
 
 Install the wheels on the command line, for example for Python 3.13 64-bit:
 
-    py.exe -3.13 -m pip install PyOpenGL-3.1.8-cp313-cp313-win_amd64.whl
-    py.exe -3.13 -m pip install PyOpenGL_accelerate-3.1.8-cp313-cp313-win_amd64.whl
+    py.exe -3.13 -m pip install PyOpenGL-3.1.9-cp313-cp313-win_amd64.whl
+    py.exe -3.13 -m pip install PyOpenGL_accelerate-3.1.9-cp313-cp313-win_amd64.whl
