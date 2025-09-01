@@ -4,7 +4,7 @@
 @echo on
 setlocal
 
-:: set PYOPENGL_VER=release-3.1.9
+:: set PYOPENGL_VER=3.1.10
 :: set FREEGLUT_VER=v3.6.0
 :: set GLE_VER=3.1.0
 

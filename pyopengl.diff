@@ -1,16 +1,5 @@
-diff --git a/setup.py b/setup.py
-index 9c99241..cfec6bd 100644
---- a/setup.py
-+++ b/setup.py
-@@ -45,4 +45,5 @@ if __name__ == "__main__":
-         },
-         data_files=datafiles,
-         cmdclass=extra_commands,
-+        libraries=[('',{'sources':[]})],
-     )
-
 diff --git a/OpenGL/GLUT/special.py b/OpenGL/GLUT/special.py
-index da3930ec..100c55a8 100644
+index da3930e..100c55a 100644
 --- a/OpenGL/GLUT/special.py
 +++ b/OpenGL/GLUT/special.py
 @@ -70,7 +70,7 @@ if __glutInitWithExit:
@@ -23,10 +12,10 @@ index da3930ec..100c55a8 100644
          """Create menu with given callback 
          
 diff --git a/OpenGL/__init__.py b/OpenGL/__init__.py
-index f9cc6bfc..100f05d4 100644
+index 959186c..6f7a653 100644
 --- a/OpenGL/__init__.py
 +++ b/OpenGL/__init__.py
-@@ -347,7 +347,7 @@ FormatHandler(
+@@ -348,7 +348,7 @@ FormatHandler(
          "numpy.float16",
          "numpy.float32",
          "numpy.float64",
@@ -36,7 +25,7 @@ index f9cc6bfc..100f05d4 100644
      isOutput=True,
  )
 diff --git a/OpenGL/platform/win32.py b/OpenGL/platform/win32.py
-index 619e6c84..7c241802 100644
+index 619e6c8..26b8054 100644
 --- a/OpenGL/platform/win32.py
 +++ b/OpenGL/platform/win32.py
 @@ -4,14 +4,14 @@ import platform
@@ -80,3 +69,14 @@ index 619e6c84..7c241802 100644
              try:
                  GLE = ctypesloader.loadLibrary( ctypes.cdll, libName )
                  GLE.FunctionType = ctypes.CFUNCTYPE
+diff --git a/setup.py b/setup.py
+index eab7150..387b270 100644
+--- a/setup.py
++++ b/setup.py
+@@ -29,5 +29,6 @@ if __name__ == "__main__":
+             },
+         },
+         data_files=datafiles,
++        libraries=[('',{'sources':[]})],
+         include_package_data=True,
+     )

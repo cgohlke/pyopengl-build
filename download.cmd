@@ -3,14 +3,13 @@
 @echo on
 setlocal
 
-:: set PYOPENGL_VER=release-3.1.9
+:: set PYOPENGL_VER=3.1.10
 set PYOPENGL_DIR=pyopengl-%PYOPENGL_VER%
 
-curl -L -o %PYOPENGL_VER%.tar.gz https://github.com/cgohlke/pyopengl/archive/refs/tags/%PYOPENGL_VER%.tar.gz
-:: curl -L -o %PYOPENGL_VER%.tar.gz https://github.com/mcfletch/pyopengl/archive/refs/tags/%PYOPENGL_VER%.tar.gz
+curl -L -o %PYOPENGL_VER%.tar.gz https://github.com/mcfletch/pyopengl/archive/refs/tags/%PYOPENGL_VER%.tar.gz
 if errorlevel 1 exit /B 1
 
-tar -xf %PYOPENGL_VER%.tar.gz
+tar -xzvf %PYOPENGL_VER%.tar.gz
 if errorlevel 1 exit /B 1
 
 :: https://stackoverflow.com/questions/24821431
